@@ -1,4 +1,7 @@
-<a href="#" class="list-group-item" (click)="onSelected()">
+<a class="list-group-item"
+  style="cursor: pointer"
+  [routerLink]="[index]"
+  routerLinkActive="active">
   <div>
     <h4 class="list-group-item-heading">
       {{ recipe.name }}
