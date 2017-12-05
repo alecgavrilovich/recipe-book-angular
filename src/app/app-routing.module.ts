@@ -7,7 +7,7 @@ import { SignupComponent } from './components/auth/signup/signup.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SigninComponent } from './components/auth/signin/signin.component';
-import { AuthGuard } from './components/auth/auth-guard.guard';
+import { AuthGuard } from './components/auth/auth.guard';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/recipes', pathMatch: 'full' },

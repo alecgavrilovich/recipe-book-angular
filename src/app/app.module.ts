@@ -23,7 +23,7 @@ import { DataStorageService } from './shared/data-storage.service';
 import { SignupComponent } from './components/auth/signup/signup.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
 import { AuthService } from './components/auth/auth.service';
-import { AuthGuard } from './components/auth/auth-guard.guard';
+import { AuthGuard } from './components/auth/auth.guard';
 
 @NgModule({
   declarations: [
