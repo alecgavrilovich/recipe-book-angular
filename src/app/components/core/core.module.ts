@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http'
 
 import { ShoppingListService } from '../shopping-list/shopping-list.service'
 import { RecipeService } from '../recipes/recipe.service'
-import { DataStorageService } from '../../shared/data-storage.service'
+// import { DataStorageService } from '../../shared/data-storage.service'
 import { AuthService } from '../auth/auth.service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { AuthInterceptor } from '../../shared/auth.interceptor'
@@ -21,7 +21,7 @@ import { LoggingIntercetor } from '../../shared/logging.intercetor'
   providers: [
     ShoppingListService,
     RecipeService,
-    DataStorageService,
+    // DataStorageService,
     AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoggingIntercetor, multi: true }
