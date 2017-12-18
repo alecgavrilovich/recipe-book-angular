@@ -35,7 +35,7 @@ export class RecipeService {
         return actions.map(a => {
           const data = a.payload.doc.data() as Recipe
           const id = a.payload.doc.id
-          console.log({ id, ...data })
+          // console.log({ id, ...data })
           return { id, ...data }
         })
       })
@@ -66,7 +66,7 @@ export class RecipeService {
     // this.recipesChanged.next(this.recipes.slice())
   }
 
-  updateRecipe(index: number, newRecipe: Recipe) {
+  updateRecipe(id: string, newRecipe: Recipe) {
     // this.recipes[index] = newRecipe
     // this.recipesChanged.next(this.recipes.slice())
   }

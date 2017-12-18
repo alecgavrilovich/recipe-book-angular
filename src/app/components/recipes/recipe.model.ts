@@ -2,14 +2,14 @@ import { Ingredient } from './../../shared/ingridient.model'
 
 export interface Recipe {
   name: string
-  description: string
+  desc: string
   imagePath: string
   ingredients: Ingredient[]
 }
 
 export class RecipeModel implements Recipe {
   public name: string
-  public description: string
+  public desc: string
   public imagePath: string
   public ingredients: Ingredient[]
 
@@ -20,7 +20,7 @@ export class RecipeModel implements Recipe {
     ingredients: Ingredient[]
   ) {
     this.name = name
-    this.description = desc
+    this.desc = desc
     this.imagePath = imagePath
     this.ingredients = ingredients
   }
