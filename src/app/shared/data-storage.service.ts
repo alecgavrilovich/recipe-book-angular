@@ -3,6 +3,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection
 } from 'angularfire2/firestore'
+
 // import { RecipeService } from '../components/recipes/recipe.service'
 import { Recipe } from '../components/recipes/recipe.model'
 import { AuthService } from '../components/auth/auth.service'
@@ -19,9 +20,7 @@ export class DataStorageService {
     private httpClient: HttpClient,
     // private recipeService: RecipeService,
     private authService: AuthService
-  ) {
-    this.recipesCollection = this.afs.collection<Recipe>('recipes')
-  }
+  ) {}
 
   // storeRecipes() {
   //   const token = this.authService.getToken()
@@ -47,10 +46,10 @@ export class DataStorageService {
   //   return this.httpClient.request(req)
   // }
 
-  getRecipesCollection() {
+  getRecipes() {
     // console.log(this.afs.collection('recipes'))
 
-    return this.recipesCollection
+    return (this.recipesCollection = this.afs.collection<Recipe>('recipes'))
 
     // const token = this.authService.getToken()
     // this.httpClient

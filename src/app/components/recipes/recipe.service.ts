@@ -2,44 +2,35 @@ import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs/Subject'
 import { DataStorageService } from '../../shared/data-storage.service'
 
-import { RecipeModel } from './recipe.model'
+import { Recipe } from './recipe.model'
 import { Ingredient } from '../../shared/ingridient.model'
 import { ShoppingListService } from '../shopping-list/shopping-list.service'
 import { Observable } from 'rxjs/Observable'
-import { Recipe } from './recipe.model'
-import {
-  AngularFirestoreDocument,
-  AngularFirestore
-} from 'angularfire2/firestore'
-
-export interface RecipeWithID extends Recipe {
-  id: string
-}
 
 @Injectable()
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>()
-  recipeDoc: AngularFirestoreDocument<RecipeWithID>
-  recipe: Observable<RecipeWithID>
-  private recipes: Observable<RecipeWithID[]>
+
+  recipes: Observable<Recipe[]>
+  // private recipes: Recipe[] = [
+  //   new Recipe(
+  //     'Tasty Schnitzel',
+  //     'A super-tasty Schnitzel - just awesome!',
+  //     'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+  //     [new Ingredient('Meat', 1), new Ingredient('French Fries', 20)]
+  //   ),
+  //   new Recipe(
+  //     'Big Fat Burger',
+  //     'What else you need to say?',
+  //     'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+  //     [new Ingredient('Buns', 2), new Ingredient('Meat', 1)]
+  //   )
+  // ]
 
   constructor(
     private dsServise: DataStorageService,
-    private slService: ShoppingListService,
-    private afs: AngularFirestore
-  ) {
-    this.recipes = this.dsServise
-      .getRecipesCollection()
-      .snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data() as Recipe
-          const id = a.payload.doc.id
-          console.log({ id, ...data })
-          return { id, ...data }
-        })
-      })
-  }
+    private slService: ShoppingListService
+  ) {}
 
   // setRecipes(recipes: Recipe[]) {
   //   this.recipes = recipes
@@ -47,14 +38,12 @@ export class RecipeService {
   // }
 
   getRecipes() {
-    return this.recipes
+    return (this.recipes = this.dsServise.getRecipes().valueChanges())
     // return this.recipes.slice()
   }
 
-  getRecipe(id: string) {
-    this.recipeDoc = this.afs.doc(`recipes/${id}`)
-    this.recipe = this.recipeDoc.valueChanges()
-    return this.recipe
+  getRecipe(index: number) {
+    return this.recipes[index]
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {

@@ -1,13 +1,6 @@
 import { Ingredient } from './../../shared/ingridient.model'
 
-export interface Recipe {
-  name: string
-  description: string
-  imagePath: string
-  ingredients: Ingredient[]
-}
-
-export class RecipeModel implements Recipe {
+export class Recipe {
   public name: string
   public description: string
   public imagePath: string
