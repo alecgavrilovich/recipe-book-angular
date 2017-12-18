@@ -4,24 +4,24 @@ export interface Recipe {
   name: string
   desc: string
   imagePath: string
-  ingredients: Ingredient[]
+  // ingredients: Ingredient[]
 }
 
 export class RecipeModel implements Recipe {
   public name: string
   public desc: string
   public imagePath: string
-  public ingredients: Ingredient[]
+  // public ingredients: Ingredient[]
 
   constructor(
     name: string,
     desc: string,
-    imagePath: string,
-    ingredients: Ingredient[]
+    imagePath: string
+    // ingredients: Ingredient[]
   ) {
     this.name = name
     this.desc = desc
     this.imagePath = imagePath
-    this.ingredients = ingredients
+    // this.ingredients = ingredients
   }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Subject } from 'rxjs/Subject'
 import { DataStorageService } from '../../shared/data-storage.service'
-
 import { RecipeModel } from './recipe.model'
 import { Ingredient } from '../../shared/ingridient.model'
 import { ShoppingListService } from '../shopping-list/shopping-list.service'
@@ -48,7 +47,6 @@ export class RecipeService {
 
   getRecipes() {
     return this.recipes
-    // return this.recipes.slice()
   }
 
   getRecipe(id: string) {
@@ -58,21 +56,18 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.slService.addIngredients(ingredients)
+    // this.slService.addIngredients(ingredients)
   }
 
   addRecipe(recipe: Recipe) {
-    // this.recipes.push(recipe)
-    // this.recipesChanged.next(this.recipes.slice())
+    this.dsServise.getRecipesCollection().add(recipe)
   }
 
-  updateRecipe(id: string, newRecipe: Recipe) {
-    // this.recipes[index] = newRecipe
-    // this.recipesChanged.next(this.recipes.slice())
+  updateRecipe(newRecipe: Recipe) {
+    this.recipeDoc.update(newRecipe)
   }
 
-  deleteRecipe(index: number) {
-    // this.recipes.splice(index, 1)
-    // this.recipesChanged.next(this.recipes.slice())
+  deleteRecipe() {
+    this.recipeDoc.delete()
   }
 }
