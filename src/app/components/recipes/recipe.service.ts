@@ -18,9 +18,9 @@ export interface RecipeWithID extends Recipe {
 @Injectable()
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>()
-  recipeDoc: AngularFirestoreDocument<RecipeWithID>
-  recipe: Observable<RecipeWithID>
+  private recipeDoc: AngularFirestoreDocument<RecipeWithID>
   private recipes: Observable<RecipeWithID[]>
+  private recipe: Observable<RecipeWithID>
 
   constructor(
     private dsServise: DataStorageService,
@@ -45,29 +45,31 @@ export class RecipeService {
   //   this.recipesChanged.next(this.recipes.slice())
   // }
 
-  getRecipes() {
+  // Recipes Operations
+  getRecipes(): Observable<RecipeWithID[]> {
     return this.recipes
   }
 
-  getRecipe(id: string) {
+  getRecipe(id: string): Observable<RecipeWithID> {
     this.recipeDoc = this.afs.doc(`recipes/${id}`)
     this.recipe = this.recipeDoc.valueChanges()
     return this.recipe
   }
 
-  addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    // this.slService.addIngredients(ingredients)
-  }
-
-  addRecipe(recipe: Recipe) {
+  addRecipe(recipe: Recipe): void {
     this.dsServise.getRecipesCollection().add(recipe)
   }
 
-  updateRecipe(newRecipe: Recipe) {
+  updateRecipe(newRecipe: Recipe): void {
     this.recipeDoc.update(newRecipe)
   }
 
-  deleteRecipe() {
+  deleteRecipe(): void {
     this.recipeDoc.delete()
+  }
+
+  // Ingredients Operations
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    // this.slService.addIngredients(ingredients)
   }
 }

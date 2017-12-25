@@ -8,6 +8,8 @@ import { AuthService } from '../../auth/auth.service'
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  isCollapsed = false
+
   constructor(
     // private dataStorageService: DataStorageService,
     public authService: AuthService

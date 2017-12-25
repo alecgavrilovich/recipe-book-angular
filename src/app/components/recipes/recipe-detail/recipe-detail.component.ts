@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-
 import { RecipeModel } from '../recipe.model'
 import { RecipeService, RecipeWithID } from '../recipe.service'
 import { Observable } from 'rxjs/Observable'
@@ -11,8 +10,8 @@ import { Observable } from 'rxjs/Observable'
   styleUrls: ['./recipe-detail.component.css']
 })
 export class RecipeDetailComponent implements OnInit {
-  recipe: Observable<RecipeWithID>
   id: string
+  recipe: Observable<RecipeWithID>
 
   constructor(
     private recipeService: RecipeService,
@@ -21,23 +20,25 @@ export class RecipeDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params: Params) => {
+    this.route.params.subscribe((params: Params): void => {
       this.id = params.id
       this.recipe = this.recipeService.getRecipe(this.id)
     })
   }
 
-  onAddToShoppingList() {
-    // this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients)
-  }
-
-  onEditRecipe() {
+  // Recipes methods
+  onEditRecipe(): void {
     this.router.navigate(['edit'], { relativeTo: this.route })
     this.router.navigate(['../', this.id, 'edit'], { relativeTo: this.route })
   }
 
-  onDeleteRecipe() {
+  onDeleteRecipe(): void {
     this.recipeService.deleteRecipe()
     this.router.navigate(['/recipes'])
+  }
+
+  // Ingredients methods
+  onAddToShoppingList() {
+    // this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients)
   }
 }

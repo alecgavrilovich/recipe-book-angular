@@ -7,8 +7,10 @@ import { ShoppingListModule } from './components/shopping-list/shopping-list.mod
 import { AuthModule } from './components/auth/auth.module'
 import { FirebaseModule } from './firebase.module'
 import { DataStorageService } from './shared/data-storage.service'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
 import { AppComponent } from './app.component'
+// import { DropdownDirective } from './shared/dropdown.directive'
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,7 +21,9 @@ import { AppComponent } from './app.component'
     ShoppingListModule,
     AuthModule,
     CoreModule,
-    FirebaseModule
+    FirebaseModule,
+    NgbModule.forRoot()
+    // DropdownDirective
   ],
   bootstrap: [AppComponent],
   providers: [DataStorageService]
