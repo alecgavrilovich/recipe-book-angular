@@ -1,48 +1,71 @@
-import { Injectable } from '@angular/core'
-import * as firebase from 'firebase'
-import { Router } from '@angular/router'
+import { Injectable } from "@angular/core";
+import * as firebase from "firebase";
+import { Router } from "@angular/router";
+import { AngularFireAuth } from "angularfire2/auth";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class AuthService {
-  token: string
+  token: string;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private afAuth: AngularFireAuth) {}
 
-  signupUser(email: string, password: string) {
+  registerUser(email: string, password: string) {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
+
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .catch(err => console.log(err))
   }
 
-  signinUser(email: string, password: string) {
+  // signinUser(email: string, password: string) {
+  //   firebase
+  //     .auth()
+  //     .signInWithEmailAndPassword(email, password)
+  //     .then(res => {
+  //       this.router.navigate(["/"]);
+  //       firebase
+  //         .auth()
+  //         .currentUser.getToken()
+  //         .then((token: string) => (this.token = token));
+  //     })
+  //     .catch(err => console.log(err));
+  // }
+
+  signinUser(email: string, password: string): void {
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(res => {
-        this.router.navigate(['/'])
-        firebase
-          .auth()
-          .currentUser.getToken()
-          .then((token: string) => (this.token = token))
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        return this.afAuth.auth
+          .signInWithEmailAndPassword(email, password)
+          .then(res => {
+            this.router.navigate(["/"]);
+            this.token = res.refreshToken;
+            return this.token;
+          });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
-  logout() {
-    firebase.auth().signOut()
-    this.token = null
+  logout(): void {
+    this.afAuth.auth.signOut();
+    this.token = null;
   }
 
   getToken() {
     firebase
       .auth()
-      .currentUser.getToken()
-      .then((token: string) => (this.token = token))
-    return this.token
+      .currentUser.getIdToken()
+      .then((token: string) => (this.token = token));
+    return this.token;
   }
 
   isAuthenticated() {
-    return this.token != null
+    return this.afAuth.authState;
   }
 }

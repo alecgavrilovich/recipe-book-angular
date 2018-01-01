@@ -1,40 +1,45 @@
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
-import { RecipeModel } from '../recipe.model'
-import { RecipeService, RecipeWithID } from '../recipe.service'
-import { Observable } from 'rxjs/Observable'
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Params, Router } from "@angular/router";
+import { RecipeModel } from "../recipe.model";
+import { RecipeService, RecipeWithID } from "../recipe.service";
+import { Observable } from "rxjs/Observable";
+import { AuthService } from "../../auth/auth.service";
 
 @Component({
-  selector: 'app-recipe-detail',
-  templateUrl: './recipe-detail.component.html',
-  styleUrls: ['./recipe-detail.component.css']
+  selector: "app-recipe-detail",
+  templateUrl: "./recipe-detail.component.html",
+  styleUrls: ["./recipe-detail.component.css"]
 })
 export class RecipeDetailComponent implements OnInit {
-  id: string
-  recipe: Observable<RecipeWithID>
+  id: string;
+  recipe: Observable<RecipeWithID>;
+  authState: Observable<any>;
 
   constructor(
     private recipeService: RecipeService,
     private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    private authService: AuthService
+  ) {
+    // this.authState =
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params): void => {
-      this.id = params.id
-      this.recipe = this.recipeService.getRecipe(this.id)
-    })
+      this.id = params.id;
+      this.recipe = this.recipeService.getRecipe(this.id);
+    });
   }
 
   // Recipes methods
   onEditRecipe(): void {
-    this.router.navigate(['edit'], { relativeTo: this.route })
-    this.router.navigate(['../', this.id, 'edit'], { relativeTo: this.route })
+    this.router.navigate(["edit"], { relativeTo: this.route });
+    this.router.navigate(["../", this.id, "edit"], { relativeTo: this.route });
   }
 
   onDeleteRecipe(): void {
-    this.recipeService.deleteRecipe()
-    this.router.navigate(['/recipes'])
+    this.recipeService.deleteRecipe();
+    this.router.navigate(["/recipes"]);
   }
 
   // Ingredients methods

@@ -1,19 +1,13 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-12">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <button class="btn btn-success"
-              (click)="onNewRecipe()">New Recipe</button>
-          </div>
-        </div>
-      </div>
+    <div class="col-sm-12">
+      <button class="btn btn-success"
+        (click)="onNewRecipe()">New Recipe</button>
     </div>
   </div>
 
   <hr>
-  <div class="col-xs-12">
+  <div class="col-sm-12">
     <ul class="list-group">
       <app-recipe-item *ngFor="let recipeEl of recipes | async"
         [recipe]="recipeEl"
@@ -21,4 +15,3 @@
     </ul>
   </div>
 </div>
-<ng-container *ngIf="!recipes">Loading...</ng-container>

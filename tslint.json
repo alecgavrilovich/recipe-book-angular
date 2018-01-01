@@ -56,9 +56,9 @@
       "check-whitespace"
     ],
     "prefer-const": true,
-    "quotemark": [true, "single"],
+    "quotemark": [true, "double"],
     "radix": true,
-    "semicolon": [true, "never"],
+    "semicolon": true,
     "triple-equals": [true, "allow-null-check"],
     "typedef-whitespace": [
       true,
