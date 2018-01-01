@@ -8,7 +8,8 @@ import { Observable } from "rxjs/Observable";
 import { Recipe } from "./recipe.model";
 import {
   AngularFirestoreDocument,
-  AngularFirestore
+  AngularFirestore,
+  AngularFirestoreCollection
 } from "angularfire2/firestore";
 
 export interface RecipeWithID extends Recipe {
@@ -17,7 +18,7 @@ export interface RecipeWithID extends Recipe {
 
 @Injectable()
 export class RecipeService {
-  recipesChanged = new Subject<Recipe[]>();
+  private recipesCollection: AngularFirestoreCollection<Recipe>;
   private recipeDoc: AngularFirestoreDocument<RecipeWithID>;
   private recipes: Observable<RecipeWithID[]>;
   private recipe: Observable<RecipeWithID>;
@@ -27,17 +28,14 @@ export class RecipeService {
     private slService: ShoppingListService,
     private afs: AngularFirestore
   ) {
-    this.recipes = this.dsServise
-      .getRecipesCollection()
-      .snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data() as Recipe;
-          const id = a.payload.doc.id;
-          // console.log({ id, ...data })
-          return { id, ...data };
-        });
+    this.recipesCollection = this.afs.collection("recipes");
+    this.recipes = this.recipesCollection.snapshotChanges().map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Recipe;
+        const id = a.payload.doc.id;
+        return { id, ...data };
       });
+    });
   }
 
   // Recipes Operations

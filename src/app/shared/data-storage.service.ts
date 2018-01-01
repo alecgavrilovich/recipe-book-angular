@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from "@angular/core";
 import {
   AngularFirestore,
   AngularFirestoreCollection
-} from 'angularfire2/firestore'
+} from "angularfire2/firestore";
 // import { RecipeService } from '../components/recipes/recipe.service'
-import { Recipe } from '../components/recipes/recipe.model'
-import { AuthService } from '../components/auth/auth.service'
-import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
-import 'rxjs/add/operator/map'
-import { Observable } from 'rxjs/Observable'
+import { Recipe } from "../components/recipes/recipe.model";
+import { AuthService } from "../components/auth/auth.service";
+import { HttpClient, HttpParams, HttpRequest } from "@angular/common/http";
+import "rxjs/add/operator/map";
+import { Observable } from "rxjs/Observable";
 
 @Injectable()
 export class DataStorageService {
-  private recipesCollection: AngularFirestoreCollection<Recipe>
+  private recipesCollection: AngularFirestoreCollection<Recipe>;
 
   constructor(
     private afs: AngularFirestore,
@@ -20,7 +20,7 @@ export class DataStorageService {
     // private recipeService: RecipeService,
     private authService: AuthService
   ) {
-    this.recipesCollection = this.afs.collection<Recipe>('recipes')
+    this.recipesCollection = this.afs.collection<Recipe>("recipes");
   }
 
   // storeRecipes() {
@@ -50,7 +50,7 @@ export class DataStorageService {
   getRecipesCollection() {
     // console.log(this.afs.collection('recipes'))
 
-    return this.recipesCollection
+    return this.recipesCollection;
 
     // const token = this.authService.getToken()
     // this.httpClient

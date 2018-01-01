@@ -13,7 +13,7 @@ import { AuthService } from "../../auth/auth.service";
 export class RecipeDetailComponent implements OnInit {
   id: string;
   recipe: Observable<RecipeWithID>;
-  authState: Observable<any>;
+  uid: string;
 
   constructor(
     private recipeService: RecipeService,
@@ -21,15 +21,31 @@ export class RecipeDetailComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {
-    // this.authState =
+    // this.authService.isAuthenticated().map(actions => {
+    //   console.log(actions.uid);
+    // });
+    // this.uid = console.log(this.uid);
   }
 
   ngOnInit() {
+    // this.uid = this.getUserId();
     this.route.params.subscribe((params: Params): void => {
       this.id = params.id;
       this.recipe = this.recipeService.getRecipe(this.id);
     });
+    this.authService.isAuthenticated().subscribe(data => {
+      console.log(data);
+      this.uid = data.uid;
+      console.log(this.uid);
+    });
+    // console.log(this.uid);
   }
+
+  // getUserId() {
+  //   return this.authService.isAuthenticated().map(data => {
+  //     return "test";
+  //   });
+  // }
 
   // Recipes methods
   onEditRecipe(): void {

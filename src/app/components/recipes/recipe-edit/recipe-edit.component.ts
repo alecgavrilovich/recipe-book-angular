@@ -3,6 +3,8 @@ import { ActivatedRoute, Params, Router } from "@angular/router";
 import { FormGroup, FormControl, FormArray, Validators } from "@angular/forms";
 import { RecipeService, RecipeWithID } from "../recipe.service";
 import { RecipeModel, Recipe } from "../recipe.model";
+import { AuthService } from "../../auth/auth.service";
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: "app-recipe-edit",
@@ -11,27 +13,35 @@ import { RecipeModel, Recipe } from "../recipe.model";
 })
 export class RecipeEditComponent implements OnInit {
   id: string;
+  recipe: Observable<RecipeWithID>;
   recipeForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       this.id = params.id;
+      this.getRecipe(params.id);
       this.initForm();
     });
-    console.log(this.id);
+    // console.log(this.id);
+  }
+
+  getRecipe(id: string) {
+    this.recipe = this.recipeService.getRecipe(id);
   }
 
   onSubmit() {
     const newRecipe = new RecipeModel(
       this.recipeForm.value["name"],
       this.recipeForm.value["desc"],
-      this.recipeForm.value["imagePath"]
+      this.recipeForm.value["imagePath"],
+      this.recipeForm.value["uid"]
       // this.recipeForm.value['ingredients']
     );
     this.recipeService.updateRecipe({ ...newRecipe });
@@ -60,7 +70,7 @@ export class RecipeEditComponent implements OnInit {
 
   private initForm() {
     // const recipeIngredients = new FormArray([])
-    this.recipeService.getRecipe(this.id).subscribe((data: RecipeWithID) => {
+    this.recipe.subscribe((data: RecipeWithID) => {
       // if (data.ingredients) {
       //   for (const ingredient of data.ingredients) {
       //     recipeIngredients.push(
@@ -74,10 +84,12 @@ export class RecipeEditComponent implements OnInit {
       //     )
       //   }
       // }
+
       this.recipeForm = new FormGroup({
         name: new FormControl(data.name, Validators.required),
         imagePath: new FormControl(data.imagePath, Validators.required),
-        desc: new FormControl(data.desc, Validators.required)
+        desc: new FormControl(data.desc, Validators.required),
+        uid: new FormControl(this.authService.uid)
         // ingredients: data.ingredients
       });
     });
