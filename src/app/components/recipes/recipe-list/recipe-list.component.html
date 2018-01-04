@@ -5,14 +5,11 @@
         (click)="onNewRecipe()">New Recipe</button>
     </div>
   </div>
-
   <hr>
-  <div class="col-sm-12">
-    <ul class="list-group">
-      <app-recipe-item *ngFor="let recipeEl of recipes | async"
-        [recipe]="recipeEl"
-        [id]="recipeEl.id"
-        [uid]="recipeEl.uid"></app-recipe-item>
-    </ul>
-  </div>
+  <ul class="list-group">
+    <app-recipe-item *ngFor="let recipeEl of recipes | async"
+      [recipe]="recipeEl"
+      [id]="recipeEl.id"
+      [uid]="recipeEl.uid"></app-recipe-item>
+  </ul>
 </div>

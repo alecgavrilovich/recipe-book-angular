@@ -45,7 +45,7 @@ export class AuthService implements OnInit {
 
   logout(): void {
     this.afAuth.auth.signOut();
-    this.uid = null;
+    // this.uid = null;
   }
 
   getToken() {

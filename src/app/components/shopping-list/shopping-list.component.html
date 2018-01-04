@@ -6,11 +6,12 @@
       <ul class="list-group">
         <a class="list-group-item"
           style="cursor: pointer"
-          *ngFor="let ingredient of ingredients; let i = index"
-          (click)="onEditItem(i)">
+          *ngFor="let ingredient of ingredients | async"
+          (click)="onEditItem(ingredient.id)">
           {{ ingredient.name }} ({{ ingredient.amount }})
         </a>
       </ul>
     </div>
   </div>
 </div>
+<!-- (click)="onEditItem(i)" -->

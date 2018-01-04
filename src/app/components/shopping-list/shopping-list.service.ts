@@ -1,42 +1,69 @@
-import { Ingredient } from './../../shared/ingridient.model'
-import { Subject } from 'rxjs/Subject'
+import { Ingredient } from "./../../shared/ingridient.model";
+import { Subject } from "rxjs/Subject";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from "angularfire2/firestore";
+import { Observable } from "rxjs/Observable";
+import { Injectable } from "@angular/core";
+import { OnInit } from "@angular/core";
 
-export class ShoppingListService {
-  ingredientsChanged = new Subject<Ingredient[]>()
-  startedEditing = new Subject<number>()
-  private ingredients: Ingredient[] = [
-    new Ingredient('Apples', 5),
-    new Ingredient('Tomatoes', 10)
-  ]
+@Injectable()
+export class ShoppingListService implements OnInit {
+  ingredientsChanged = new Subject<Observable<Ingredient[]>>();
+  startedEditing = new Subject<string>();
+  private ingredientsCollection: AngularFirestoreCollection<Ingredient>;
+  private ingredients: Observable<Ingredient[]>;
+  private ingredientDoc: AngularFirestoreDocument<Ingredient>;
+  private ingredient: Observable<Ingredient>;
 
-  getIngredients() {
-    return this.ingredients.slice()
+  constructor(private afs: AngularFirestore) {
+    this.ingredientsCollection = this.afs.collection("ingredients");
+    this.ingredients = this.ingredientsCollection
+      .snapshotChanges()
+      .map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as Ingredient;
+          const id = a.payload.doc.id;
+          console.log(id);
+          return { id, ...data };
+        });
+      });
   }
 
-  getIngredient(index: number) {
-    return this.ingredients[index]
+  ngOnInit(): void {}
+
+  getIngredients() {
+    return this.ingredients;
+  }
+
+  getIngredient(id: string) {
+    this.ingredientDoc = this.afs.doc(`ingredients/${id}`);
+    this.ingredient = this.ingredientDoc.valueChanges();
+    return this.ingredient;
   }
 
   addIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient)
-    this.ingredientsChanged.next(this.ingredients.slice())
+    // this.ingredients.push(ingredient);
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
     // for (let ingredient of ingredients) {
     //   this.addIngredient(ingredient);
     // }
-    this.ingredients.push(...ingredients)
-    this.ingredientsChanged.next(this.ingredients.slice())
+    // this.ingredients.push(...ingredients);
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  updateIngredient(index: number, newIngredient: Ingredient) {
-    this.ingredients[index] = newIngredient
-    this.ingredientsChanged.next(this.ingredients.slice())
+  updateIngredient(id: string, newIngredient: Ingredient) {
+    // this.ingredients[index] = newIngredient;
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  deleteIngredient(index: number) {
-    this.ingredients.splice(index, 1)
-    this.ingredientsChanged.next(this.ingredients.slice())
+  deleteIngredient(id: string) {
+    // this.ingredients.splice(index, 1);
+    // this.ingredientsChanged.next(this.ingredients.slice());
   }
 }

@@ -5,6 +5,7 @@ import { RecipeModel, Recipe } from "../recipe.model";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
 import { DataStorageService } from "../../../shared/data-storage.service";
+import { AuthService } from "../../auth/auth.service";
 
 @Component({
   selector: "app-recipe-list",
@@ -17,7 +18,8 @@ export class RecipeListComponent implements OnInit {
   constructor(
     private recipeService: RecipeService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -25,6 +27,12 @@ export class RecipeListComponent implements OnInit {
   }
 
   onNewRecipe() {
-    this.router.navigate(["new"], { relativeTo: this.route });
+    this.authService.isAuthenticated().subscribe(res => {
+      if (res !== null) {
+        this.router.navigate(["new"], { relativeTo: this.route });
+      } else {
+        this.router.navigate(["/signin"]);
+      }
+    });
   }
 }

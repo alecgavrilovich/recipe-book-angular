@@ -33,19 +33,14 @@ export class RecipeDetailComponent implements OnInit {
       this.id = params.id;
       this.recipe = this.recipeService.getRecipe(this.id);
     });
-    this.authService.isAuthenticated().subscribe(data => {
-      console.log(data);
-      this.uid = data.uid;
-      console.log(this.uid);
-    });
+    // After sign out there is an error subscribe.js:159 TypeError: Cannot read property 'uid' of null
+    // this.authService.isAuthenticated().subscribe(data => {
+    //   console.log(data);
+    //   this.uid = data.uid;
+    //   console.log(this.uid);
+    // });
     // console.log(this.uid);
   }
-
-  // getUserId() {
-  //   return this.authService.isAuthenticated().map(data => {
-  //     return "test";
-  //   });
-  // }
 
   // Recipes methods
   onEditRecipe(): void {
