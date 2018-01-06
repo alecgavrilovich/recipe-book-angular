@@ -7,6 +7,7 @@ import { ShoppingListModule } from "./components/shopping-list/shopping-list.mod
 import { AuthModule } from "./components/auth/auth.module";
 import { FirebaseModule } from "./firebase.module";
 import { DataStorageService } from "./shared/data-storage.service";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { AppComponent } from "./app.component";
 
@@ -19,7 +20,8 @@ import { AppComponent } from "./app.component";
     ShoppingListModule,
     AuthModule,
     CoreModule,
-    FirebaseModule
+    FirebaseModule,
+    ReactiveFormsModule
   ],
   bootstrap: [AppComponent],
   providers: [DataStorageService]

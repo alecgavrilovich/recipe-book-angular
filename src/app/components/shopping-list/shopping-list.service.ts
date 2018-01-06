@@ -26,7 +26,7 @@ export class ShoppingListService implements OnInit {
         return actions.map(a => {
           const data = a.payload.doc.data() as Ingredient;
           const id = a.payload.doc.id;
-          console.log(id);
+          // console.log(id);
           return { id, ...data };
         });
       });
@@ -45,8 +45,8 @@ export class ShoppingListService implements OnInit {
   }
 
   addIngredient(ingredient: Ingredient) {
-    // this.ingredients.push(ingredient);
-    // this.ingredientsChanged.next(this.ingredients.slice());
+    this.afs.collection("ingredients").add({ ...ingredient });
+    // this.ingredientsChanged.next(this.ingredients);
   }
 
   addIngredients(ingredients: Ingredient[]) {
@@ -58,12 +58,12 @@ export class ShoppingListService implements OnInit {
   }
 
   updateIngredient(id: string, newIngredient: Ingredient) {
-    // this.ingredients[index] = newIngredient;
-    // this.ingredientsChanged.next(this.ingredients.slice());
+    this.ingredientDoc.set({ ...newIngredient });
+    // this.ingredientsChanged.next(this.ingredients);
+    this.startedEditing.next("updated");
   }
 
   deleteIngredient(id: string) {
-    // this.ingredients.splice(index, 1);
-    // this.ingredientsChanged.next(this.ingredients.slice());
+    this.ingredientDoc.delete();
   }
 }
