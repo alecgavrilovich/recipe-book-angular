@@ -23,7 +23,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   editMode = false;
   editedItemId: string;
-  editedItem: Observable<Ingredient>;
+  // editedItem: Observable<Ingredient>;
 
   constructor(private slService: ShoppingListService) {}
 
@@ -31,10 +31,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     this.initForm();
     this.subscription = this.slService.startedEditing.subscribe(
       (id: string) => {
-        this.onClear();
-        // if (id === "updated") {
-        //   return;
-        // }
         console.log(id);
         this.editedItemId = id;
         this.editMode = true;
@@ -52,7 +48,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  initForm() {
+  private initForm() {
     this.slForm = new FormGroup({
       name: new FormControl(),
       amount: new FormControl()
@@ -60,12 +56,10 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   onAddItem() {
-    // const value = form.value;
     const newIngredient = new Ingredient(
       this.slForm.value["name"],
       this.slForm.value["amount"]
     );
-
     if (this.editMode) {
       this.slService.updateIngredient(this.editedItemId, newIngredient);
     } else {

@@ -29,7 +29,6 @@ export class RecipeEditComponent implements OnInit {
       this.getRecipe(params.id);
       this.initForm();
     });
-    // console.log(this.id);
   }
 
   getRecipe(id: string) {

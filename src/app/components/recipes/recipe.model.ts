@@ -5,7 +5,7 @@ export interface Recipe {
   desc: string;
   imagePath: string;
   uid: string;
-  // ingredients: Ingredient[]
+  ingredients: Ingredient[];
 }
 
 export class RecipeModel implements Recipe {
@@ -19,6 +19,7 @@ export class RecipeModel implements Recipe {
     public name: string,
     public desc: string,
     public imagePath: string,
-    public uid: string // ingredients: Ingredient[]
+    public uid: string,
+    public ingredients: Ingredient[]
   ) {}
 }

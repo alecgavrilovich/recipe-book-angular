@@ -26,7 +26,6 @@ export class ShoppingListService implements OnInit {
         return actions.map(a => {
           const data = a.payload.doc.data() as Ingredient;
           const id = a.payload.doc.id;
-          // console.log(id);
           return { id, ...data };
         });
       });
@@ -59,7 +58,6 @@ export class ShoppingListService implements OnInit {
 
   updateIngredient(id: string, newIngredient: Ingredient) {
     this.ingredientDoc.set({ ...newIngredient });
-    // this.ingredientsChanged.next(this.ingredients);
     this.startedEditing.next("updated");
   }
 
