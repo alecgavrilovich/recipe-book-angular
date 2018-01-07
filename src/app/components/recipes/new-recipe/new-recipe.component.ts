@@ -4,14 +4,18 @@ import { RecipeService } from "../recipe.service";
 import { RecipeModel } from "../recipe.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../auth/auth.service";
+import { Subscription } from "rxjs/Subscription";
+import { OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 
 @Component({
   selector: "app-new-recipe",
   templateUrl: "./new-recipe.component.html",
   styleUrls: ["./new-recipe.component.css"]
 })
-export class NewRecipeComponent implements OnInit {
+export class NewRecipeComponent implements OnInit, OnDestroy {
   recipeForm: FormGroup;
+  uid: string;
+
   constructor(
     private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -21,6 +25,12 @@ export class NewRecipeComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.authService.isAuthenticated().subscribe(data => {
+      if (data === null) {
+        return;
+      }
+      return (this.uid = data.uid);
+    });
   }
 
   onSubmit() {
@@ -36,29 +46,27 @@ export class NewRecipeComponent implements OnInit {
   }
 
   initForm() {
-    // const ingredients = new FormArray([
-    //   new FormGroup({
-    //     name: new FormControl(),
-    //     amount: new FormControl()
-    //   })
-    // ]);
-    this.recipeForm = new FormGroup({
-      name: new FormControl(),
-      imagePath: new FormControl(),
-      desc: new FormControl(),
-      uid: new FormControl(this.authService.uid),
-      ingredients: new FormArray([])
+    this.authService.isAuthenticated().subscribe(data => {
+      this.recipeForm = new FormGroup({
+        name: new FormControl(),
+        imagePath: new FormControl(),
+        desc: new FormControl(),
+        uid: new FormControl(data.uid),
+        ingredients: new FormArray([])
+      });
     });
-    // console.log(this.authService.uid);
   }
 
   onAddIngredient() {
-    (<FormArray>this.recipeForm.get("ingredients")).push(
-      new FormGroup({
-        name: new FormControl(),
-        amount: new FormControl()
-      })
-    );
+    this.authService.isAuthenticated().subscribe(data => {
+      (<FormArray>this.recipeForm.get("ingredients")).push(
+        new FormGroup({
+          name: new FormControl(),
+          amount: new FormControl(),
+          uid: new FormControl(data.uid)
+        })
+      );
+    });
   }
   onDeleteIngredient(index: number) {
     (<FormArray>this.recipeForm.get("ingredients")).removeAt(index);
@@ -66,4 +74,5 @@ export class NewRecipeComponent implements OnInit {
   onCancel() {
     this.router.navigate(["../"], { relativeTo: this.route });
   }
+  ngOnDestroy(): void {}
 }

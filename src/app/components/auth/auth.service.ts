@@ -28,15 +28,14 @@ export class AuthService implements OnInit {
   signinUser(email: string, password: string): void {
     firebase
       .auth()
-      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(() => {
         return this.afAuth.auth
           .signInWithEmailAndPassword(email, password)
           .then(res => {
             this.router.navigate(["/"]);
-            // this.token = res.refreshToken;
             this.uid = res.uid;
-            console.log(this.uid);
+            // console.log(this.uid);
             return this.uid;
           });
       })

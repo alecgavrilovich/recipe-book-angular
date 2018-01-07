@@ -12,6 +12,7 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { Subscription } from "rxjs/Subscription";
 import { Observable } from "rxjs/Observable";
 import { Subject } from "rxjs/Subject";
+import { AuthService } from "../../auth/auth.service";
 
 @Component({
   selector: "app-shopping-edit",
@@ -25,7 +26,10 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editedItemId: string;
   // editedItem: Observable<Ingredient>;
 
-  constructor(private slService: ShoppingListService) {}
+  constructor(
+    private slService: ShoppingListService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.initForm();
@@ -41,7 +45,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
           }
           this.slForm.setValue({
             name: data.name,
-            amount: data.amount
+            amount: data.amount,
+            uid: data.uid
           });
         });
       }
@@ -49,16 +54,20 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.slForm = new FormGroup({
-      name: new FormControl(),
-      amount: new FormControl()
+    this.authService.isAuthenticated().subscribe(data => {
+      this.slForm = new FormGroup({
+        name: new FormControl(),
+        amount: new FormControl(),
+        uid: new FormControl(data.uid)
+      });
     });
   }
-
+  // `${this.authService.uid}`
   onAddItem() {
     const newIngredient = new Ingredient(
       this.slForm.value["name"],
-      this.slForm.value["amount"]
+      this.slForm.value["amount"],
+      this.slForm.value["uid"]
     );
     if (this.editMode) {
       this.slService.updateIngredient(this.editedItemId, newIngredient);

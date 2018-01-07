@@ -4,6 +4,7 @@ import { RecipeModel } from "../recipe.model";
 import { RecipeService, RecipeWithID } from "../recipe.service";
 import { Observable } from "rxjs/Observable";
 import { AuthService } from "../../auth/auth.service";
+import { ShoppingListService } from "../../shopping-list/shopping-list.service";
 
 @Component({
   selector: "app-recipe-detail",
@@ -19,7 +20,8 @@ export class RecipeDetailComponent implements OnInit {
     private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private slService: ShoppingListService
   ) {
     // this.authService.isAuthenticated().map(actions => {
     //   console.log(actions.uid);
@@ -28,7 +30,6 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.uid = this.getUserId();
     this.route.params.subscribe((params: Params): void => {
       this.id = params.id;
       this.recipe = this.recipeService.getRecipe(this.id);
@@ -55,6 +56,13 @@ export class RecipeDetailComponent implements OnInit {
 
   // Ingredients methods
   onAddToShoppingList() {
-    // this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients)
+    console.log("test");
+    // this.recipe.subscribe()... didn't work
+    this.recipeService.getRecipe(this.id).subscribe((data: RecipeWithID) => {
+      console.log(data);
+      for (const ingredient of data.ingredients) {
+        this.slService.addIngredient({ ...ingredient });
+      }
+    });
   }
 }
