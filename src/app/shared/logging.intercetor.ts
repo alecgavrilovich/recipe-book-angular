@@ -3,11 +3,11 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent
-} from '@angular/common/http'
-import { Observable } from 'rxjs/Observable'
-import { AuthService } from '../components/auth/auth.service'
+} from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
+import { AuthService } from "../components/auth/auth.service";
 // import { Injectable } from '@angular/core'
-import 'rxjs/add/operator/do'
+import "rxjs/add/operator/do";
 
 // @Injectable()
 export class LoggingIntercetor implements HttpInterceptor {
@@ -21,7 +21,7 @@ export class LoggingIntercetor implements HttpInterceptor {
     //   params: req.params.set('auth', this.authService.getToken())
     // })
     return next.handle(req).do(event => {
-      console.log('Log Intercetor', event)
-    })
+      console.log("Log Intercetor", event);
+    });
   }
 }

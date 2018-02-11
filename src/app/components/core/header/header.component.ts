@@ -25,6 +25,16 @@ export class HeaderComponent {
   //   this.dataStorageService.getRecipes()
   // }
 
+  userShoppingList() {
+    this.authService.isAuthenticated().subscribe(res => {
+      if (res !== null) {
+        this.router.navigate(["/shopping-list"]);
+      } else {
+        this.router.navigate(["/signin"]);
+      }
+    });
+  }
+
   onLogout() {
     this.authService.logout();
     this.router.navigate(["/signin"]);

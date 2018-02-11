@@ -10,6 +10,10 @@ import { DataStorageService } from "./shared/data-storage.service";
 import { ReactiveFormsModule } from "@angular/forms";
 
 import { AppComponent } from "./app.component";
+import { AuthGuard } from "./components/auth/auth.guard";
+import { AuthService } from "./components/auth/auth.service";
+import { ShoppingListService } from "./components/shopping-list/shopping-list.service";
+import { RecipeService } from "./components/recipes/recipe.service";
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +28,12 @@ import { AppComponent } from "./app.component";
     ReactiveFormsModule
   ],
   bootstrap: [AppComponent],
-  providers: [DataStorageService]
+  providers: [
+    DataStorageService,
+    AuthGuard,
+    AuthService,
+    ShoppingListService
+    // RecipeService
+  ]
 })
 export class AppModule {}

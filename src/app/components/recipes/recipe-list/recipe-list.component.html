@@ -7,7 +7,7 @@
   </div>
   <hr>
   <ul class="list-group">
-    <app-recipe-item *ngFor="let recipeEl of recipes | async"
+    <app-recipe-item *ngFor="let recipeEl of recipes"
       [recipe]="recipeEl"
       [id]="recipeEl.id"
       [uid]="recipeEl.uid"></app-recipe-item>

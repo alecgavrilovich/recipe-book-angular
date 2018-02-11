@@ -22,6 +22,7 @@ import { AuthService } from "../../auth/auth.service";
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   slForm: FormGroup;
   subscription: Subscription;
+  subscriptionForUserId: Subscription;
   editMode = false;
   editedItemId: string;
   // editedItem: Observable<Ingredient>;
@@ -43,6 +44,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
             this.onClear();
             return;
           }
+          console.log(data.uid);
+
           this.slForm.setValue({
             name: data.name,
             amount: data.amount,
@@ -54,13 +57,20 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.authService.isAuthenticated().subscribe(data => {
-      this.slForm = new FormGroup({
-        name: new FormControl(),
-        amount: new FormControl(),
-        uid: new FormControl(data.uid)
+    this.subscriptionForUserId = this.authService
+      .isAuthenticated()
+      .subscribe(data => {
+        if (data === null) {
+          return;
+        }
+        console.log(data.uid);
+
+        this.slForm = new FormGroup({
+          name: new FormControl(),
+          amount: new FormControl(),
+          uid: new FormControl(data.uid)
+        });
       });
-    });
   }
   // `${this.authService.uid}`
   onAddItem() {
@@ -90,5 +100,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.subscriptionForUserId.unsubscribe();
   }
 }

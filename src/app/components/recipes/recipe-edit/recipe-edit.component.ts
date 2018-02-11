@@ -31,6 +31,9 @@ export class RecipeEditComponent implements OnInit {
       this.initForm();
     });
     this.authService.isAuthenticated().subscribe(data => {
+      if (data === null) {
+        return;
+      }
       this.uid = data.uid;
     });
   }
@@ -52,18 +55,18 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onAddIngredient() {
-    this.authService.isAuthenticated().subscribe(data => {
-      (<FormArray>this.recipeForm.get("ingredients")).push(
-        new FormGroup({
-          name: new FormControl(null, Validators.required),
-          amount: new FormControl(null, [
-            Validators.required,
-            Validators.pattern(/^[1-9]+[0-9]*$/)
-          ]),
-          uid: new FormControl(data.uid)
-        })
-      );
-    });
+    // this.authService.isAuthenticated().subscribe(data => {
+    (<FormArray>this.recipeForm.get("ingredients")).push(
+      new FormGroup({
+        name: new FormControl(null, Validators.required),
+        amount: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/)
+        ]),
+        uid: new FormControl()
+      })
+    );
+    // });
   }
 
   onDeleteIngredient(index: number) {
@@ -87,7 +90,7 @@ export class RecipeEditComponent implements OnInit {
                 Validators.required,
                 Validators.pattern(/^[1-9]+[0-9]*$/)
               ]),
-              uid: new FormControl(this.uid)
+              uid: new FormControl(this.authService.uid)
             })
           );
         }
@@ -97,7 +100,7 @@ export class RecipeEditComponent implements OnInit {
         name: new FormControl(recipeData.name, Validators.required),
         imagePath: new FormControl(recipeData.imagePath, Validators.required),
         desc: new FormControl(recipeData.desc, Validators.required),
-        uid: new FormControl(this.uid),
+        uid: new FormControl(this.authService.uid),
         ingredients: recipeIngredients
       });
     });

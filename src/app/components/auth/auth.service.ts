@@ -15,7 +15,10 @@ export class AuthService implements OnInit {
   ngOnInit() {
     // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     // Add 'implements OnInit' to the class.
-    console.log(this.uid);
+    // console.log(this.uid);
+    // this.afAuth.authState.subscribe(data => {
+    //   this.uid = data.uid;
+    // });
   }
 
   registerUser(email: string, password: string) {
@@ -30,20 +33,20 @@ export class AuthService implements OnInit {
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(() => {
-        return this.afAuth.auth
-          .signInWithEmailAndPassword(email, password)
-          .then(res => {
-            this.router.navigate(["/"]);
-            this.uid = res.uid;
-            // console.log(this.uid);
-            return this.uid;
-          });
+        return this.afAuth.auth.signInWithEmailAndPassword(email, password);
       })
-      .catch(err => console.log(err));
+      .then(res => {
+        console.log(res);
+
+        this.uid = res.uid;
+      });
+    this.router.navigate(["/"]);
+    console.log(this.uid);
   }
 
   logout(): void {
     this.afAuth.auth.signOut();
+    // this.router.navigate(["/"]);
     // this.uid = null;
   }
 

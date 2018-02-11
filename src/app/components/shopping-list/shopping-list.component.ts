@@ -10,18 +10,18 @@ import { Observable } from "rxjs/Observable";
   styleUrls: ["./shopping-list.component.css"]
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
-  private ingredients: Observable<Ingredient[]>;
+  private ingredients: Ingredient[];
   private subscription: Subscription;
-
+  private subscription2: Subscription;
   constructor(private slService: ShoppingListService) {}
 
   ngOnInit() {
-    this.ingredients = this.slService.getIngredients();
-    // this.subscription = this.slService.ingredientsChanged.subscribe(
-    //   (ingredients: Observable<Ingredient[]>): void => {
-    //     this.ingredients = ingredients;
-    //   }
-    // );
+    // this.ingredients = this.slService.getIngredients();
+    this.subscription = this.slService
+      .getIngredients()
+      .subscribe(ingredients => {
+        this.ingredients = ingredients;
+      });
   }
 
   onEditItem(id: string) {
@@ -29,6 +29,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
+    // this.subscription2.unsubscribe();
   }
 }

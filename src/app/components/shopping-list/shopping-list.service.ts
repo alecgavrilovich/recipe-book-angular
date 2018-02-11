@@ -8,9 +8,13 @@ import {
 import { Observable } from "rxjs/Observable";
 import { Injectable } from "@angular/core";
 import { OnInit } from "@angular/core";
+import { RecipeWithID } from "../recipes/recipe.service";
+import { Subscription } from "rxjs/Subscription";
+import { OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 
 @Injectable()
-export class ShoppingListService implements OnInit {
+export class ShoppingListService implements OnInit, OnDestroy {
+  subscritptionForRecipe: Subscription;
   ingredientsChanged = new Subject<Observable<Ingredient[]>>();
   startedEditing = new Subject<string>();
   private ingredientsCollection: AngularFirestoreCollection<Ingredient>;
@@ -45,7 +49,7 @@ export class ShoppingListService implements OnInit {
 
   addIngredient(ingredient: Ingredient) {
     this.afs.collection("ingredients").add({ ...ingredient });
-    // this.ingredientsChanged.next(this.ingredients);
+    this.ingredientsChanged.next(this.ingredients);
   }
 
   addIngredients(ingredients: Ingredient[]) {
@@ -54,6 +58,15 @@ export class ShoppingListService implements OnInit {
     // }
     // this.ingredients.push(...ingredients);
     // this.ingredientsChanged.next(this.ingredients.slice());
+    console.log(ingredients);
+    for (const ingredient of ingredients) {
+      const newIngredient: Ingredient = new Ingredient(
+        ingredient.name,
+        ingredient.amount,
+        null
+      );
+      this.ingredientsCollection.add({ ...newIngredient });
+    }
   }
 
   updateIngredient(id: string, newIngredient: Ingredient) {
@@ -63,5 +76,9 @@ export class ShoppingListService implements OnInit {
 
   deleteIngredient(id: string) {
     this.ingredientDoc.delete();
+  }
+
+  ngOnDestroy(): void {
+    this.subscritptionForRecipe.unsubscribe();
   }
 }

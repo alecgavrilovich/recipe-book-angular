@@ -14,7 +14,7 @@ import { OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 })
 export class NewRecipeComponent implements OnInit, OnDestroy {
   recipeForm: FormGroup;
-  uid: string;
+  // uid: object;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,12 +25,13 @@ export class NewRecipeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initForm();
-    this.authService.isAuthenticated().subscribe(data => {
-      if (data === null) {
-        return;
-      }
-      return (this.uid = data.uid);
-    });
+    // this.uid = this.authService.isAuthenticated().map(data => {
+    //   // if (data === null) {
+    //   //   return;
+    //   // }
+    //   return data !== null;
+    // });
+    console.log(this.authService.uid);
   }
 
   onSubmit() {
@@ -46,27 +47,27 @@ export class NewRecipeComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    this.authService.isAuthenticated().subscribe(data => {
-      this.recipeForm = new FormGroup({
-        name: new FormControl(),
-        imagePath: new FormControl(),
-        desc: new FormControl(),
-        uid: new FormControl(data.uid),
-        ingredients: new FormArray([])
-      });
+    // this.authService.isAuthenticated().subscribe(data => {
+    this.recipeForm = new FormGroup({
+      name: new FormControl(),
+      imagePath: new FormControl(),
+      desc: new FormControl(),
+      uid: new FormControl(this.authService.uid),
+      ingredients: new FormArray([])
     });
+    // });
   }
 
   onAddIngredient() {
-    this.authService.isAuthenticated().subscribe(data => {
-      (<FormArray>this.recipeForm.get("ingredients")).push(
-        new FormGroup({
-          name: new FormControl(),
-          amount: new FormControl(),
-          uid: new FormControl(data.uid)
-        })
-      );
-    });
+    // this.authService.isAuthenticated().subscribe(data => {
+    (<FormArray>this.recipeForm.get("ingredients")).push(
+      new FormGroup({
+        name: new FormControl(),
+        amount: new FormControl(),
+        uid: new FormControl(this.authService.uid)
+      })
+    );
+    // });
   }
   onDeleteIngredient(index: number) {
     (<FormArray>this.recipeForm.get("ingredients")).removeAt(index);

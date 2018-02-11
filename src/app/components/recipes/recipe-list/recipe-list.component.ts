@@ -12,8 +12,9 @@ import { AuthService } from "../../auth/auth.service";
   templateUrl: "./recipe-list.component.html",
   styleUrls: ["./recipe-list.component.css"]
 })
-export class RecipeListComponent implements OnInit {
-  recipes: Observable<RecipeWithID[]>;
+export class RecipeListComponent implements OnInit, OnDestroy {
+  recipes: RecipeWithID[];
+  subscription: Subscription;
 
   constructor(
     private recipeService: RecipeService,
@@ -23,7 +24,9 @@ export class RecipeListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.recipes = this.recipeService.getRecipes();
+    this.subscription = this.recipeService.getRecipes().subscribe(data => {
+      this.recipes = data;
+    });
   }
 
   onNewRecipe() {
@@ -34,5 +37,9 @@ export class RecipeListComponent implements OnInit {
         this.router.navigate(["/signin"]);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
