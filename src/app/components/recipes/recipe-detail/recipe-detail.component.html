@@ -7,9 +7,10 @@
     <h3 class="card-title">{{ (recipe | async)?.name }}</h3>
     <p class="card-text">{{ (recipe | async)?.desc }}</p>
     <div class="btn-group btn-group-sm mb-3">
-      <button class="btn btn-primary"
+      <!-- doesn't work, DOM bug possible memory leak -->
+      <!-- <button class="btn btn-primary"
         (click)="onAddToShoppingList()"
-        style="cursor: pointer;">To Shoping List</button>
+        style="cursor: pointer;">To Shoping List</button> -->
       <ng-template [ngIf]="(authService.isAuthenticated() | async) && ((recipe | async)?.uid === (authService.isAuthenticated() | async)?.uid)">
         <button class="btn btn-success"
           style="cursor: pointer;"
